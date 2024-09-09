@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export function Redirect() {
-  const session = useSession();
-  const router = useRouter();
+    const session = useSession();
+    const router = useRouter();
 
-  useEffect(() => {
-    if (session?.data?.user) {
-      router.push("/dashboard");
-    } else {
-      router.push("/login");
-    }
-  }, [session, router]);
+    useEffect(() => {
+        if (session?.data?.user) {
+            router.push("/dashboard");
+        } else {
+            router.push("/");
+        }
+    }, [session, router]);
 
-  return null;
+    return null;
 }

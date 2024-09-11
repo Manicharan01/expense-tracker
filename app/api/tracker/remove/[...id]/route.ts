@@ -1,22 +1,17 @@
 import { prismaClient } from "@/app/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
-const deleteSchema = z.object({
-    id: z.string(),
-})
-
-export async function DELETE(req: NextRequest) {
-    const { id } = await req.json()
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+    const id = params.id
 
     try {
-        const newDelete = deleteSchema.parse({ id })
-
         await prismaClient.expense.delete({
             where: {
-                id: newDelete.id
+                id: id[0]
             }
         })
+
+        return NextResponse.json({ message: "Success" }, { status: 200 })
     } catch (e) {
         console.log(e)
 

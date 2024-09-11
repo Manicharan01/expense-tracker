@@ -30,6 +30,7 @@ import { PlusCircle, DollarSign, Calendar, Tag } from "lucide-react"
 import { Category } from '@prisma/client';
 import { signOut } from "next-auth/react"
 import Link from "next/link"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
 export interface Expense {
     id: string;
@@ -311,6 +312,35 @@ export default function Dashboard() {
                                             <DollarSign className="mr-2 h-4 w-4 text-gray-400" />
                                             {expense.amount.toFixed(2)}
                                         </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button variant="destructive" size="sm">Delete</Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent className="bg-zinc-800 text-zinc-50 border border-zinc-700">
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                    <AlertDialogDescription className="text-zinc-400">
+                                                        This action cannot be undone. This will permanently delete the blog post.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel className="bg-zinc-700 text-zinc-50 hover:bg-zinc-600">Cancel</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={async () => {
+                                                        await fetch(`http://localhost:3000/api/tracker/remove/${expense.id}`, {
+                                                            method: "DELETE",
+                                                            headers: {
+                                                                "content-type": "application/json"
+                                                            },
+                                                        })
+                                                        getExpenses()
+                                                    }} className="bg-red-600 text-zinc-50 hover:bg-red-700">
+                                                        Delete
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </TableCell>
                                 </TableRow>
                             ))}

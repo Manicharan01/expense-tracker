@@ -1,7 +1,7 @@
 "use client";
 
 import { Expense } from "@/app/dashboard/page";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from "@/components/ui/input";
@@ -59,7 +59,9 @@ export function Updatecard() {
     const [name, setName] = useState(expense.name)
     const [amount, setAmount] = useState(expense.amount)
     const [category, setCategory] = useState(expense.category)
+    const [date, setDate] = useState(new Date())
     const { id } = useParams()
+    const router = useRouter()
 
 
     return (
@@ -100,6 +102,16 @@ export function Updatecard() {
                             ))}
                         </SelectContent>
                     </Select>
+                    <Input
+                        name="date"
+                        type="date"
+                        value={date.toISOString().slice(0, 10)}
+                        onChange={(e) => {
+                            setDate(new Date(e.target.value))
+                        }}
+                        className="bg-secondary border-primary mt-4"
+                        required
+                    />
                 </CardContent>
                 <CardFooter>
                     <Button
@@ -116,6 +128,8 @@ export function Updatecard() {
                                     amount,
                                     category
                                 })
+                            }).then(() => {
+                                router.push('/dashboard')
                             })
                         }}
                     >Update</Button>

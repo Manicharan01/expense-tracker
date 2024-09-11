@@ -25,9 +25,8 @@ export async function POST(req: NextRequest) {
     })
 
     try {
-        const newExpense = expenseSchema.parse({ name, amount, body: { category }, date });
+        const newExpense = expenseSchema.parse({ name, amount, body: { category } });
         const newDate = dateSchema.safeParse(date)
-        console.log(newDate)
 
         await prismaClient.expense.create({
             data: {

@@ -9,11 +9,15 @@ const editSchema = z.object({
     category: z.nativeEnum(Category),
 })
 
+const dateSchema = z.coerce.date()
+
 export async function PUT(req: NextRequest) {
-    const { name, amount, category, id } = await req.json()
+    const { name, amount, category, id, date } = await req.json()
+    console.log(date)
 
     try {
         const newEdit = editSchema.parse({ name, amount, category, id })
+        const newDate = dateSchema.safeParse(date)
 
         await prismaClient.expense.update({
             where: {
@@ -22,7 +26,8 @@ export async function PUT(req: NextRequest) {
             data: {
                 name: newEdit.name,
                 amount: newEdit.amount,
-                category: newEdit.category
+                category: newEdit.category,
+                date: newDate.data
             }
         })
 

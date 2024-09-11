@@ -126,7 +126,8 @@ export function Updatecard() {
                                     id,
                                     name,
                                     amount,
-                                    category
+                                    category,
+                                    date
                                 })
                             }).then(() => {
                                 router.push('/dashboard')

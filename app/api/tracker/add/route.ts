@@ -12,9 +12,11 @@ const expenseSchema = z.object({
     })
 })
 
+const dateSchema = z.coerce.date()
+
 export async function POST(req: NextRequest) {
     const session = await getServerSession();
-    const { name, amount, category } = await req.json();
+    const { name, amount, category, date } = await req.json();
 
     const user = await prismaClient.user.findUnique({
         where: {
@@ -23,7 +25,9 @@ export async function POST(req: NextRequest) {
     })
 
     try {
-        const newExpense = expenseSchema.parse({ name, amount, body: { category } });
+        const newExpense = expenseSchema.parse({ name, amount, body: { category }, date });
+        const newDate = dateSchema.safeParse(date)
+        console.log(newDate)
 
         await prismaClient.expense.create({
             data: {
@@ -31,6 +35,7 @@ export async function POST(req: NextRequest) {
                 amount: newExpense.amount,
                 category: newExpense.body.category,
                 userId: user?.id ?? "",
+                date: newDate?.data ?? ""
             }
         })
 

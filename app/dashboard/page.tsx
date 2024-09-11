@@ -29,6 +29,7 @@ import {
 import { PlusCircle, DollarSign, Calendar, Tag } from "lucide-react"
 import { Category } from '@prisma/client';
 import { signOut } from "next-auth/react"
+import Link from "next/link"
 
 export interface Expense {
     id: string;
@@ -178,7 +179,7 @@ export default function Dashboard() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="category">Category</Label>
-                                    <Select name="category" value={category} onValueChange={(value) => {
+                                    <Select name="category" value={category} onValueChange={(value: any) => {
                                         setCategory(() => (value))
                                     }} required>
                                         <SelectTrigger className="bg-gray-700 border-gray-600">
@@ -292,7 +293,7 @@ export default function Dashboard() {
                         <TableBody>
                             {filteredExpenses.map((expense) => (
                                 <TableRow key={expense.id}>
-                                    <TableCell>{expense.name}</TableCell>
+                                    <TableCell><Link href={`http://localhost:3000/edit/${expense.id}`} className="text-blue-400 hover:underline">{expense.name}</Link></TableCell>
                                     <TableCell className="font-medium">
                                         <div className="flex items-center">
                                             <Calendar className="mr-2 h-4 w-4 text-gray-400" />

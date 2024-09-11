@@ -7,7 +7,6 @@ const editSchema = z.object({
     name: z.string(),
     amount: z.number(),
     category: z.nativeEnum(Category),
-    id: z.string(),
 })
 
 export async function PUT(req: NextRequest) {
@@ -18,7 +17,7 @@ export async function PUT(req: NextRequest) {
 
         await prismaClient.expense.update({
             where: {
-                id: newEdit.id
+                id: id[0]
             },
             data: {
                 name: newEdit.name,
@@ -26,6 +25,8 @@ export async function PUT(req: NextRequest) {
                 category: newEdit.category
             }
         })
+
+        return NextResponse.json({ message: 'Successfull' }, { status: 200 })
     } catch (e) {
         console.log(e)
 
